@@ -6,8 +6,6 @@ import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-
 
 @Service
 @RequiredArgsConstructor
