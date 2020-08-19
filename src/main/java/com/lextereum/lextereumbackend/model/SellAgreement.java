@@ -3,19 +3,20 @@ package com.lextereum.lextereumbackend.model;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 
-@Data
+@Value
 @Builder
 @RequiredArgsConstructor
 public class SellAgreement {
-    private final String seller;
-    private final String sellerID;
-    private final String buyer;
-    private final String buyerID;
-    private final String date;
-    private final int squareMeters;
-    private final String city;
-    private final String mortgageRegister;
-    private final int price;
-    private final int downpayment;
+    private String seller;
+    private String sellerID;
+    private String buyer;
+    private String buyerID;
+    private String date;
+    private int squareMeters;
+    private String city;
+    private String mortgageRegister;
+    private int price;
+    private int downpayment;
 }
