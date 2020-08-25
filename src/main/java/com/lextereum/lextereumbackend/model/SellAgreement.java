@@ -1,7 +1,6 @@
 package com.lextereum.lextereumbackend.model;
 
 import lombok.Builder;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
