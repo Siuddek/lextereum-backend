@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.Optional;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -18,4 +20,6 @@ public class DocumentKeywords {
     private String[] mortgageRegisterKeywords;
     private String[] priceKeywords;
     private String[] downpaymentKeywords;
+    private Optional<String> mortgageRegex;
+    private Optional<String> priceRegex;
 }

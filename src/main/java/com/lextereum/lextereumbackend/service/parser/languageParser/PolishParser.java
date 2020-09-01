@@ -5,6 +5,8 @@ import com.lextereum.lextereumbackend.model.SellAgreement;
 import com.lextereum.lextereumbackend.service.parser.GeneralParser;
 import com.lextereum.lextereumbackend.service.parser.IDocumentParser;
 
+import java.util.Optional;
+
 public class PolishParser implements IDocumentParser {
 
     private final GeneralParser parser;
@@ -23,9 +25,11 @@ public class PolishParser implements IDocumentParser {
                                                             .dateKeywords(new String[]{"Dnia", "Data"})
                                                             .squareMetersKeywords(new String[]{"powierzchni", "powierzchnia"})
                                                             .cityKeywords(new String[]{"miasto", "mieście", "miescie"})
-                                                            .mortgageRegisterKeywords(new String[]{"numerem", "numer", "numerze", "nr.", "nr"})
+                                                            .mortgageRegisterKeywords(new String[]{"numerem ", "numer ", "numerze: "})
                                                             .priceKeywords(new String[]{"cenę", "cene", "cena", "ceną"})
                                                             .downpaymentKeywords(new String[]{"zadatek", "zadatkiem", "zadatku"})
+                                                            .mortgageRegex(Optional.of("\\w{4}\\/\\d{4,8}\\/\\d{1}"))
+                                                            .priceRegex(Optional.of("\\d{4,}"))
                                                             .build();
         parser.getParsedDocument(document, documentKeywords);
         return null; //TODO return full agreement

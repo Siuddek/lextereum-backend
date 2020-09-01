@@ -1,8 +1,10 @@
 package com.lextereum.lextereumbackend.service.parser;
 
+import com.google.common.primitives.Ints;
 import com.lextereum.lextereumbackend.model.DocumentKeywords;
 import com.lextereum.lextereumbackend.model.SellAgreement;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -11,6 +13,8 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 @RequiredArgsConstructor
@@ -26,9 +30,14 @@ public class GeneralParser {
                                                                                     .findFirst()
                                                                                     .get()
                                                                                     .getValue();
-        // SellAgreement sellAgreement = SellAgreement.builder()
-        //                                            .seller(getName(document, keywords.getSellerKeywords()))
-        //                                            .buyer(getName(document, keywords.getBuyerKeywords())).sellerID()
+        String date = getWordAfterKeyword(document, keywords.getDateKeywords(), Optional.empty());
+        int squareMeters = Optional.of(getWordAfterKeyword(document, keywords.getSquareMetersKeywords(), Optional.empty()))
+                                   .map(Ints::tryParse)
+                                   .orElse(0);
+        String city = getWordAfterKeyword(document, keywords.getCityKeywords(), Optional.empty());
+        String mortgageRegister = getWordAfterKeyword(document, keywords.getMortgageRegisterKeywords(), keywords.getMortgageRegex());
+        String price = getWordAfterKeyword(document, keywords.getPriceKeywords(), keywords.getPriceRegex());
+        String downpayment = getWordByRegex(document, keywords.getDownpaymentKeywords(), keywords.getPriceRegex());
         return null;
     }
 
@@ -60,4 +69,38 @@ public class GeneralParser {
         return null;
     }
 
+
+    private String getWordAfterKeyword(String document, String[] keywords, Optional<String> regex) {
+        String lineWithKeyword = getLineWithKeyword(document, keywords, regex);
+        Iterator<String> wordsIterator;
+        for (String keyword : keywords){
+            wordsIterator =  Arrays.stream(lineWithKeyword.split(" ")).iterator();
+            while (wordsIterator.hasNext())
+                if (wordsIterator.next().equals(keyword.replaceAll("\\s", "")))
+                    return wordsIterator.next().replaceAll(",", "");
+        }
+        return "";
+    }
+
+    private String getWordByRegex(String document, String[] keywords, Optional<String> regex) {
+        String lineWithKeyword = getLineWithKeyword(document, keywords, regex);
+        Matcher matcher = Pattern.compile(regex.orElse(".*")).matcher(lineWithKeyword);
+        if (matcher.find()) {
+            return matcher.group();
+        }
+        return "";
+    }
+
+    @NotNull
+    private String getLineWithKeyword(String document, String[] keywords, Optional<String> regex) {
+        return Stream.of(document.split(","))
+                     .map(String::new)
+                     .collect(Collectors.toList())
+                     .stream()
+                     .map(line -> line.replaceAll("\n", " "))
+                     .filter(line -> Arrays.stream(keywords).anyMatch(line::contains) && Pattern.compile(regex.orElse(".*")).matcher(line).find())
+                     .findAny()
+                     .map(String::new)
+                     .orElse("");
+    }
 }
