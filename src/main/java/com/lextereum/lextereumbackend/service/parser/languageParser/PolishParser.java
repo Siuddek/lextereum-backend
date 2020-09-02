@@ -31,8 +31,7 @@ public class PolishParser implements IDocumentParser {
                                                             .mortgageRegex(Optional.of("\\w{4}\\/\\d{4,8}\\/\\d{1}"))
                                                             .priceRegex(Optional.of("\\d{4,}"))
                                                             .build();
-        parser.getParsedDocument(document, documentKeywords);
-        return null; //TODO return full agreement
+        return parser.getParsedDocument(document, documentKeywords);
     }
 
 }

@@ -28,11 +28,10 @@ public class DocumentParserService {
         var language = recognizeLanguage(document);
         if (language.isPresent()) {
             var parser = documentParserFactory.getParser(language.get().getLanguage());
-            SellAgreement agreement = parser.parseDocument(document);
+            return parser.parseDocument(document);
         } else {
             throw new LanguageNotFoundException();
         }
-        return null;
     }
 
     private Optional<LdLocale> recognizeLanguage(String document) throws IOException {

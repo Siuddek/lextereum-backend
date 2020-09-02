@@ -18,11 +18,10 @@ public class DocumentReaderService {
     private final Tesseract tesseract;
     private final DocumentParserService documentParserService;
 
-    public String readDocument(byte[] documentImage) throws TesseractException, IOException {
+    public SellAgreement readDocument(byte[] documentImage) throws TesseractException, IOException {
         String document = tesseract.doOCR(ByteOperationUtils.createImageFromBytes(documentImage));
         System.out.println(document);
-        SellAgreement agreement = documentParserService.parseDocument(document);
-        return document;
+        return documentParserService.parseDocument(document);
     }
 
 

@@ -23,22 +23,44 @@ public class GeneralParser {
     private final NameRepository nameRepository;
 
     public SellAgreement getParsedDocument(String document, DocumentKeywords keywords) {
+        String sellerFullName = getName(document, keywords.getSellerKeywords());
         String buyFullName = getName(document, keywords.getBuyerKeywords());
-        String sellerId = getSellerId(document) == null ? "" : getSellerId(document).stream()
+        String sellerId = getClientId(document) == null ? "" : getClientId(document).stream()
                                                                                     .filter(Objects::nonNull)
                                                                                     .filter(pair -> pair.getKey().equals("Seller"))
                                                                                     .findFirst()
                                                                                     .get()
                                                                                     .getValue();
-        String date = getWordAfterKeyword(document, keywords.getDateKeywords(), Optional.empty());
+        String buyerId = getClientId(document) == null ? "" : getClientId(document).stream()
+                                                                                    .filter(Objects::nonNull)
+                                                                                    .filter(pair -> pair.getKey().equals("Buyer"))
+                                                                                    .findFirst()
+                                                                                    .get()
+                                                                                    .getValue();
+        String date = getWordAfterKeyword(document, keywords.getDateKeywords(), Optional.empty()); // TODO: use Instant class
         int squareMeters = Optional.of(getWordAfterKeyword(document, keywords.getSquareMetersKeywords(), Optional.empty()))
                                    .map(Ints::tryParse)
                                    .orElse(0);
         String city = getWordAfterKeyword(document, keywords.getCityKeywords(), Optional.empty());
         String mortgageRegister = getWordAfterKeyword(document, keywords.getMortgageRegisterKeywords(), keywords.getMortgageRegex());
-        String price = getWordAfterKeyword(document, keywords.getPriceKeywords(), keywords.getPriceRegex());
-        String downpayment = getWordByRegex(document, keywords.getDownpaymentKeywords(), keywords.getPriceRegex());
-        return null;
+        int price = Optional.of(getWordAfterKeyword(document, keywords.getPriceKeywords(), keywords.getPriceRegex()))
+                               .map(Ints::tryParse)
+                               .orElse(0);
+        int downpayment = Optional.of(getWordByRegex(document, keywords.getDownpaymentKeywords(), keywords.getPriceRegex()))
+                                  .map(Ints::tryParse)
+                                  .orElse(0);
+        return SellAgreement.builder()
+                            .seller(sellerFullName)
+                            .buyer(buyFullName)
+                            .sellerID(sellerId)
+                            .buyerID(buyerId)
+                            .date(date)
+                            .squareMeters(squareMeters)
+                            .city(city)
+                            .mortgageRegister(mortgageRegister)
+                            .price(price)
+                            .downpayment(downpayment)
+                            .build();
     }
 
     private String getName(String document, String[] keywords){ //TODO make it looks less stupid
@@ -56,7 +78,7 @@ public class GeneralParser {
         return fullName.get();
     }
 
-    private List<Map.Entry<String, String>> getSellerId(String document) {
+    private List<Map.Entry<String, String>> getClientId(String document) {
         Pattern idPattern = Pattern.compile("[0-9]{11}");
         Matcher matcher = idPattern.matcher(document);
         if(matcher.find()) {
