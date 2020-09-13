@@ -1,6 +1,6 @@
 package com.lextereum.lextereumbackend.service;
 
-import com.lextereum.lextereumbackend.model.SellAgreement;
+import com.lextereum.lextereumbackend.repositories.SellAgreementDto;
 import net.sourceforge.tess4j.TesseractException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +24,10 @@ public class DocumentReaderServiceTest {
         byte[] testImage = loadFile();
 
         //when
-        SellAgreement sellAgreement = testObj.readDocument(testImage);
+        SellAgreementDto sellAgreementDto = testObj.readDocument(testImage);
 
         // then
-        assertNotNull(sellAgreement);
+        assertNotNull(sellAgreementDto);
     }
 
 

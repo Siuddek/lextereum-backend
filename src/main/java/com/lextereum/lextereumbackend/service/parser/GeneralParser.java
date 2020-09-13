@@ -2,7 +2,8 @@ package com.lextereum.lextereumbackend.service.parser;
 
 import com.google.common.primitives.Ints;
 import com.lextereum.lextereumbackend.model.DocumentKeywords;
-import com.lextereum.lextereumbackend.model.SellAgreement;
+import com.lextereum.lextereumbackend.repositories.SellAgreementDto;
+import com.lextereum.lextereumbackend.repositories.NameRepository;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
@@ -22,7 +23,7 @@ public class GeneralParser {
 
     private final NameRepository nameRepository;
 
-    public SellAgreement getParsedDocument(String document, DocumentKeywords keywords) {
+    public SellAgreementDto getParsedDocument(String document, DocumentKeywords keywords) {
         String sellerFullName = getName(document, keywords.getSellerKeywords());
         String buyFullName = getName(document, keywords.getBuyerKeywords());
         String sellerId = getClientId(document) == null ? "" : getClientId(document).stream()
@@ -49,18 +50,19 @@ public class GeneralParser {
         int downpayment = Optional.of(getWordByRegex(document, keywords.getDownpaymentKeywords(), keywords.getPriceRegex()))
                                   .map(Ints::tryParse)
                                   .orElse(0);
-        return SellAgreement.builder()
-                            .seller(sellerFullName)
-                            .buyer(buyFullName)
-                            .sellerID(sellerId)
-                            .buyerID(buyerId)
-                            .date(date)
-                            .squareMeters(squareMeters)
-                            .city(city)
-                            .mortgageRegister(mortgageRegister)
-                            .price(price)
-                            .downpayment(downpayment)
-                            .build();
+        return SellAgreementDto.builder()
+                               .seller(sellerFullName)
+                               .buyer(buyFullName)
+                               .sellerID(sellerId)
+                               .buyerID(buyerId)
+                               .date(date)
+                               .squareMeters(squareMeters)
+                               .city(city)
+                               .mortgageRegister(mortgageRegister)
+                               .price(price)
+                               .downpayment(downpayment)
+                               .documentID(UUID.randomUUID().toString())
+                               .build();
     }
 
     private String getName(String document, String[] keywords){ //TODO make it looks less stupid

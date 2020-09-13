@@ -1,6 +1,6 @@
 package com.lextereum.lextereumbackend.service;
 
-import com.lextereum.lextereumbackend.model.SellAgreement;
+import com.lextereum.lextereumbackend.repositories.SellAgreementDto;
 import com.lextereum.lextereumbackend.service.parser.DocumentParserService;
 import com.lextereum.lextereumbackend.utils.ByteOperationUtils;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ public class DocumentReaderService {
     private final Tesseract tesseract;
     private final DocumentParserService documentParserService;
 
-    public SellAgreement readDocument(byte[] documentImage) throws TesseractException, IOException {
+    public SellAgreementDto readDocument(byte[] documentImage) throws TesseractException, IOException {
         String document = tesseract.doOCR(ByteOperationUtils.createImageFromBytes(documentImage));
         System.out.println(document);
         return documentParserService.parseDocument(document);

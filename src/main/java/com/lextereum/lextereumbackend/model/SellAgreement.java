@@ -1,13 +1,23 @@
 package com.lextereum.lextereumbackend.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.RequiredArgsConstructor;
-import lombok.Value;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Value
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "SellAgreements")
+@Data
 @Builder
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class SellAgreement {
+    @Id
+    private String documentID;
     private String seller;
     private String sellerID;
     private String buyer;

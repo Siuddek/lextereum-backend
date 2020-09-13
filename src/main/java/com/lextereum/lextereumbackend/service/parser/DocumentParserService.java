@@ -1,7 +1,7 @@
 package com.lextereum.lextereumbackend.service.parser;
 
 import com.google.common.base.Optional;
-import com.lextereum.lextereumbackend.model.SellAgreement;
+import com.lextereum.lextereumbackend.repositories.SellAgreementDto;
 import com.lextereum.lextereumbackend.service.parser.exception.LanguageNotFoundException;
 import com.optimaize.langdetect.LanguageDetector;
 import com.optimaize.langdetect.LanguageDetectorBuilder;
@@ -24,7 +24,7 @@ public class DocumentParserService {
 
     private final DocumentParserFactory documentParserFactory;
 
-    public SellAgreement parseDocument(String document) throws IOException {
+    public SellAgreementDto parseDocument(String document) throws IOException {
         var language = recognizeLanguage(document);
         if (language.isPresent()) {
             var parser = documentParserFactory.getParser(language.get().getLanguage());
