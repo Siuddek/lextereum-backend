@@ -1,7 +1,7 @@
 package com.lextereum.lextereumbackend.service.parser;
 
 import com.google.common.base.Optional;
-import com.lextereum.lextereumbackend.repositories.SellAgreementDto;
+import com.lextereum.lextereumbackend.model.SellAgreementDto;
 import com.lextereum.lextereumbackend.service.parser.exception.LanguageNotFoundException;
 import com.optimaize.langdetect.LanguageDetector;
 import com.optimaize.langdetect.LanguageDetectorBuilder;

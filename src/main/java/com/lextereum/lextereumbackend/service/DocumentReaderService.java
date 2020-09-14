@@ -1,6 +1,6 @@
 package com.lextereum.lextereumbackend.service;
 
-import com.lextereum.lextereumbackend.repositories.SellAgreementDto;
+import com.lextereum.lextereumbackend.model.SellAgreementDto;
 import com.lextereum.lextereumbackend.service.parser.DocumentParserService;
 import com.lextereum.lextereumbackend.utils.ByteOperationUtils;
 import lombok.RequiredArgsConstructor;

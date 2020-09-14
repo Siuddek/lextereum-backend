@@ -1,7 +1,10 @@
 package com.lextereum.lextereumbackend.controller;
 
+import com.lextereum.lextereumbackend.email.EmailSender;
 import com.lextereum.lextereumbackend.minio.LexMinioClient;
-import com.lextereum.lextereumbackend.repositories.SellAgreementDto;
+import com.lextereum.lextereumbackend.model.User;
+import com.lextereum.lextereumbackend.model.SellAgreementDto;
+import com.lextereum.lextereumbackend.repositories.UserRepository;
 import com.lextereum.lextereumbackend.service.DocumentReaderService;
 import lombok.RequiredArgsConstructor;
 import net.sourceforge.tess4j.TesseractException;
@@ -10,17 +13,18 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:4200") //TODO use docker
 @RequestMapping("/documents")
-public class DocumentReaderController {
+public class DocumentController {
 
     private final DocumentReaderService documentReader;
     private final LexMinioClient minioClient;
+    private final UserRepository userRepository;
+    private final EmailSender emailSender;
 
     @PutMapping("/read")
     @ResponseStatus(HttpStatus.CREATED)
@@ -30,9 +34,12 @@ public class DocumentReaderController {
         return sellAgreementDto;
     }
 
-    @PutMapping("/save")
+    @PostMapping("/save")
     @ResponseStatus(HttpStatus.CREATED)
-    public void saveDocumentDetails(@RequestParam("sellAgreement") SellAgreementDto sellAgreementDto) {
-        InputStream documentImage = minioClient.getFileContent(sellAgreementDto.getDocumentID());
+    public boolean saveDocumentDetails(@RequestBody SellAgreementDto sellAgreement) {
+        // InputStream documentImage = minioClient.getFileContent(sellAgreementDto.getDocumentID());
+        User validationUser = userRepository.findUserById(sellAgreement.getTargetID());
+        emailSender.sendEmail(validationUser.getEmail(), "registry: " + sellAgreement.getMortgageRegister());
+        return true;
     }
 }

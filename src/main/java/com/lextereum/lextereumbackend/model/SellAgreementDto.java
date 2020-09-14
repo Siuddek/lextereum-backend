@@ -1,4 +1,4 @@
-package com.lextereum.lextereumbackend.repositories;
+package com.lextereum.lextereumbackend.model;
 
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -19,4 +19,5 @@ public class SellAgreementDto {
     private int price;
     private int downpayment;
     private String documentID;
+    private String targetID;
 }

@@ -2,7 +2,7 @@ package com.lextereum.lextereumbackend.service.parser;
 
 import com.google.common.primitives.Ints;
 import com.lextereum.lextereumbackend.model.DocumentKeywords;
-import com.lextereum.lextereumbackend.repositories.SellAgreementDto;
+import com.lextereum.lextereumbackend.model.SellAgreementDto;
 import com.lextereum.lextereumbackend.repositories.NameRepository;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;

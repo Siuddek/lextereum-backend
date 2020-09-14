@@ -1,6 +1,6 @@
 package com.lextereum.lextereumbackend.service;
 
-import com.lextereum.lextereumbackend.repositories.SellAgreementDto;
+import com.lextereum.lextereumbackend.model.SellAgreementDto;
 import net.sourceforge.tess4j.TesseractException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

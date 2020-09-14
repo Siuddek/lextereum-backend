@@ -1,4 +1,4 @@
-package com.lextereum.lextereumbackend.model;
+package com.lextereum.lextereumbackend.repositories;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
