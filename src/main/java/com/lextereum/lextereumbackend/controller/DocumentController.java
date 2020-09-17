@@ -8,6 +8,7 @@ import com.lextereum.lextereumbackend.repositories.User;
 import com.lextereum.lextereumbackend.model.SellAgreementDto;
 import com.lextereum.lextereumbackend.repositories.UserRepository;
 import com.lextereum.lextereumbackend.service.DocumentReaderService;
+import com.lextereum.lextereumbackend.service.ImageHashService;
 import lombok.RequiredArgsConstructor;
 import net.sourceforge.tess4j.TesseractException;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,7 @@ public class DocumentController {
     private final UserRepository userRepository;
     private final EmailSender emailSender;
     private final SellAgreementRepository sellAgreementRepository;
+    private final ImageHashService hashService;
 
     @PutMapping("/read")
     @ResponseStatus(HttpStatus.CREATED)
@@ -44,7 +46,7 @@ public class DocumentController {
         InputStream documentImage = minioClient.getFileContent(sellAgreement.getDocumentID());
         User validationUser = userRepository.findUserById(sellAgreement.getTargetID());
         //emailSender.sendEmail(validationUser.getEmail(), "registry: " + sellAgreement.getMortgageRegister());
-        return "hashhashhashhashhashhashhashhashhashhashhashhashhashhash";
+        return hashService.getImageHash(documentImage);
     }
 
     @PostMapping("/save")
