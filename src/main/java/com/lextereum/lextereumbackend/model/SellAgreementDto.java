@@ -20,4 +20,5 @@ public class SellAgreementDto {
     private int downpayment;
     private String documentID;
     private String targetID;
+    private String documentHash;
 }

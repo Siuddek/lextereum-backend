@@ -28,4 +28,6 @@ public class SellAgreement {
     private String mortgageRegister;
     private int price;
     private int downpayment;
+    private String targetID;
+    private String documentHash;
 }

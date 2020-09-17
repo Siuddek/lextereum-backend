@@ -2,7 +2,9 @@ package com.lextereum.lextereumbackend.controller;
 
 import com.lextereum.lextereumbackend.email.EmailSender;
 import com.lextereum.lextereumbackend.minio.LexMinioClient;
-import com.lextereum.lextereumbackend.model.User;
+import com.lextereum.lextereumbackend.repositories.SellAgreement;
+import com.lextereum.lextereumbackend.repositories.SellAgreementRepository;
+import com.lextereum.lextereumbackend.repositories.User;
 import com.lextereum.lextereumbackend.model.SellAgreementDto;
 import com.lextereum.lextereumbackend.repositories.UserRepository;
 import com.lextereum.lextereumbackend.service.DocumentReaderService;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 
 @RestController
@@ -25,6 +28,7 @@ public class DocumentController {
     private final LexMinioClient minioClient;
     private final UserRepository userRepository;
     private final EmailSender emailSender;
+    private final SellAgreementRepository sellAgreementRepository;
 
     @PutMapping("/read")
     @ResponseStatus(HttpStatus.CREATED)
@@ -34,12 +38,19 @@ public class DocumentController {
         return sellAgreementDto;
     }
 
+    @PostMapping("/validate")
+    @ResponseStatus(HttpStatus.CREATED)
+    public String validateDocumentDetails(@RequestBody SellAgreementDto sellAgreement) {
+        InputStream documentImage = minioClient.getFileContent(sellAgreement.getDocumentID());
+        User validationUser = userRepository.findUserById(sellAgreement.getTargetID());
+        //emailSender.sendEmail(validationUser.getEmail(), "registry: " + sellAgreement.getMortgageRegister());
+        return "hashhashhashhashhashhashhashhashhashhashhashhashhashhash";
+    }
+
     @PostMapping("/save")
     @ResponseStatus(HttpStatus.CREATED)
-    public boolean saveDocumentDetails(@RequestBody SellAgreementDto sellAgreement) {
-        // InputStream documentImage = minioClient.getFileContent(sellAgreementDto.getDocumentID());
-        User validationUser = userRepository.findUserById(sellAgreement.getTargetID());
-        emailSender.sendEmail(validationUser.getEmail(), "registry: " + sellAgreement.getMortgageRegister());
-        return true;
+    public boolean saveDocumentDetails(@RequestBody SellAgreement sellAgreement) {
+        sellAgreementRepository.save(sellAgreement);
+        return sellAgreementRepository.existsById(sellAgreement.getDocumentID());
     }
 }

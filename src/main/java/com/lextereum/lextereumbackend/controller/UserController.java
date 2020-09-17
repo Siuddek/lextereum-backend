@@ -1,6 +1,6 @@
 package com.lextereum.lextereumbackend.controller;
 
-import com.lextereum.lextereumbackend.model.User;
+import com.lextereum.lextereumbackend.repositories.User;
 import com.lextereum.lextereumbackend.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
