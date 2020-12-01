@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
@@ -19,15 +20,32 @@ public class DocumentReaderServiceTest {
     private DocumentReaderService testObj;
 
     @Test
-    public void documentReadTest() throws IOException, TesseractException {
+    public void sellAgreementNotNullTest() throws IOException, TesseractException {
         // given
         byte[] testImage = loadFile();
 
         //when
-        SellAgreementDto sellAgreementDto = testObj.readDocument(testImage);
+        SellAgreementDto sellAgreement = testObj.readDocument(testImage);
 
         // then
-        assertNotNull(sellAgreementDto);
+        assertNotNull(sellAgreement);
+    }
+
+    @Test
+    public void sellAgreementParsedWithProperValues() throws IOException, TesseractException {
+        //given
+        byte[] testImage = loadFile();
+        String validSellerID = "12345678958";
+        String validBuyerID = "33665549781";
+        int price = 750000;
+
+        //when
+        SellAgreementDto sellAgreement = testObj.readDocument(testImage);
+
+        //then
+        assertEquals(validSellerID, sellAgreement.getSellerID());
+        assertEquals(validBuyerID, sellAgreement.getBuyerID());
+        assertEquals(price, sellAgreement.getPrice());
     }
 
 

@@ -20,7 +20,6 @@ public class DocumentReaderService {
 
     public SellAgreementDto readDocument(byte[] documentImage) throws TesseractException, IOException {
         String document = tesseract.doOCR(ByteOperationUtils.createImageFromBytes(documentImage));
-        System.out.println(document);
         return documentParserService.parseDocument(document);
     }
 
