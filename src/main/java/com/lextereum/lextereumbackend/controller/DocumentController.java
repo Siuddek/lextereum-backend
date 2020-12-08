@@ -21,7 +21,7 @@ import java.io.InputStream;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:4200") //TODO use docker
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/documents")
 public class DocumentController {
 
